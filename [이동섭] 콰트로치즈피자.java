@@ -3,14 +3,14 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Main {
 
     static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+    static Set<String> cheeseToppingSet = new HashSet<>();
 
     final static String CHEESE = "Cheese";
 
@@ -18,18 +18,23 @@ public class Main {
 
         String n = in.readLine();
 
-        String[] cheeseArray = in.readLine().split(" ");
+        String[] cheeseToppingArray = in.readLine().split(" ");
 
-        Set<String> cheeseSet = Arrays.stream(cheeseArray)
-            .filter(cheese -> cheese.endsWith(CHEESE))
-            .collect(Collectors.toSet());
+        for (String cheeseTopping : cheeseToppingArray) {
+            if (cheeseTopping.endsWith(CHEESE)) {
+                cheeseToppingSet.add(cheeseTopping);
+            }
+        }
 
-        if (cheeseSet.size() >= 4) {
+        if (cheeseToppingSet.size() >= 4) {
             out.write("yummy");
             out.close();
             return;
         }
+
         out.write("sad");
         out.close();
+
     }
+
 }
