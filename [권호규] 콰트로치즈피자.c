@@ -47,6 +47,7 @@ int main(void) {
         }
     }
 
+
     if(cnt >= 4) {
         printf("yummy");
         return 0;
