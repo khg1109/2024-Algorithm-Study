@@ -1,26 +1,28 @@
+import java.io.*;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int size = scanner.nextInt();
-        String findCheese = "Cheese";
-        String[] stringArray = new String[size];
-        Set<String> toppingSet = new HashSet<>();
+    static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+    static Set<String> toppingSet = new HashSet<>();
+    final static String CHEESE = "Cheese";
 
-        for (int i = 0; i < stringArray.length; i++) {
-            stringArray[i] = scanner.next();
-            if (stringArray[i].endsWith(findCheese)) {
-                toppingSet.add(stringArray[i]);
+    public static void main(String[] args) throws IOException {
+        int number = Integer.parseInt(in.readLine());
+
+        for (int i = 0; i < number; i++) {
+            String topping = in.readLine();
+            if (topping.endsWith(CHEESE)) {
+                toppingSet.add(topping);
+                if (toppingSet.size() == 4) {
+                    out.write("yummy");
+                    out.flush();
+                    return;
+                }
             }
         }
-
-        if (toppingSet.size() >= 4) {
-            System.out.println("yummy");
-        } else {
-            System.out.println("sad");
-        }
+        out.write("sad");
+        out.flush();
     }
 }
