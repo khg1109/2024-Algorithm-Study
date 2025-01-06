@@ -1,50 +1,82 @@
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    static int N; // 수빈이의 현재 위치
-    static int K; // 동생의 위치
-    static int[] check = new int[100001]; // 방문 여부 및 이동 횟수 기록
+    static int N;  // 가로
+    static int M;  // 세로
+    static int now_x;
+    static int now_y;
+    static int count = 0;
 
-    public static void main(String[] args) {
+    static int white_count = 0;
+    static int black_count = 0;
+    static char map[][];
+    static boolean visit[][];
 
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        K = sc.nextInt();
+    // 상 하 좌 우 범위 체크에서 사용할 배열
+    static int dirY[] = {-1, 1, 0, 0};  // 상 하 체크
+    static int dirX[] = {0, 0, -1, 1};  // 좌 우 체크
 
-        // 수빈이와 동생의 위치가 같을 경우
-        if (N == K) {
-            System.out.println(0);
-        } else {
-            bfs(N);
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());  // 가로
+        M = Integer.parseInt(st.nextToken());  // 세로
+
+        // 1 지도 만들기
+        map = new char[M][N];
+        visit = new boolean[M][N];
+        for (int i = 0; i < M; i++) {
+            String str = br.readLine();
+
+            for (int j = 0; j < N; j++) {
+                char ch = str.charAt(j);
+                map[i][j] = ch;
+            }
         }
-    }
 
-    static void bfs(int start) {
-        Queue<Integer> q = new LinkedList<>();
-        q.add(start);
-        check[start] = 1; // 시작점 방문 처리
 
-        while (!q.isEmpty()) {
-            int current = q.poll();
+        // 2. DFS를 이용해서 탐색하기
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < N; j++) {
+                if (visit[i][j] == false) {
+                    char color = map[i][j];
+                    count = 0;
+                    DFS(j, i, color);
 
-            // 현재 위치에서 이동 가능한 3가지 경우
-            int[] nextPositions = {current + 1, current - 1, current * 2};
+                    if (color == 'W') {
+                        white_count += count * count;
+                    } else {
+                        black_count += count * count;
+                    }
 
-            for (int next : nextPositions) {
-                // 동생의 위치에 도달하면 결과 출력 후 종료
-                if (next == K) {
-                    System.out.println(check[current]);
-                    return;
-                }
-
-                // 유효한 범위 내에서 아직 방문하지 않은 위치만 큐에 추가
-                if (next >= 0 && next < check.length && check[next] == 0) {
-                    q.add(next);
-                    check[next] = check[current] + 1; // 이동 횟수 증가
                 }
             }
         }
+
+        System.out.println(white_count + " " + black_count);
+    }
+    static void DFS(int x, int y, char color){
+        visit[y][x] = true;
+        count += 1;
+
+        for(int i = 0; i < 4; i++){
+            now_y = y + dirY[i];
+            now_x = x + dirX[i];
+
+            if(Range_chck() == true && map[now_y][now_x] == color && visit[now_y][now_x] == false){
+                DFS(now_x, now_y, map[now_y][now_x]);
+            }
+        }
+    }
+
+
+    static boolean Range_chck() {
+        return (0 <= now_y && now_y < M && 0 <= now_x && now_x < N);
+
+
     }
 }
