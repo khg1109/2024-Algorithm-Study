@@ -11,6 +11,7 @@ class Edge implements Comparable<Edge> {
         this.end = end;
         this.weight = weight;
     }
+    
 
     @Override
     public int compareTo(Edge other) {
@@ -74,6 +75,7 @@ public class Main {
         }
         return parent[x] = find(parent[x]);
     }
+
 
     // 두 노드를 합치기
     public static void union(int x, int y) {
